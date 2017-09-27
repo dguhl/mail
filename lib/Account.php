@@ -37,7 +37,6 @@ use Horde_Imap_Client;
 use Horde_Imap_Client_Ids;
 use Horde_Imap_Client_Mailbox;
 use Horde_Imap_Client_Socket;
-use Horde_Mail_Rfc822_Address;
 use Horde_Mail_Rfc822_List;
 use Horde_Mail_Transport;
 use Horde_Mail_Transport_Mail;
@@ -186,13 +185,11 @@ class Account implements IAccount {
 	 */
 	public function sendMessage(IMessage $message, $draftUID) {
 		// build mime body
-		$from = new Horde_Mail_Rfc822_Address($message->getFrom());
-		$from->personal = $this->getName();
 		$headers = [
-			'From' => $from,
-			'To' => $message->getToList(),
-			'Cc' => $message->getCCList(),
-			'Bcc' => $message->getBCCList(),
+			'From' => $message->getFrom()->first()->toHorde(),
+			'To' => $message->getTo()->toHorde(),
+			'Cc' => $message->getCC()->toHorde(),
+			'Bcc' => $message->getBCC()->toHorde(),
 			'Subject' => $message->getSubject(),
 		];
 
@@ -239,13 +236,11 @@ class Account implements IAccount {
 	 */
 	public function saveDraft(IMessage $message, $previousUID) {
 		// build mime body
-		$from = new Horde_Mail_Rfc822_Address($message->getFrom());
-		$from->personal = $this->getName();
 		$headers = [
-			'From' => $from,
-			'To' => $message->getToList(),
-			'Cc' => $message->getCCList(),
-			'Bcc' => $message->getBCCList(),
+			'From' => $message->getFrom()->first()->toHorde(),
+			'To' => $message->getTo()->toHorde(),
+			'Cc' => $message->getCC()->toHorde(),
+			'Bcc' => $message->getBCC()->toHorde(),
 			'Subject' => $message->getSubject(),
 			'Date' => Horde_Mime_Headers_Date::create(),
 		];

@@ -26,6 +26,8 @@ use Horde_Exception;
 use Horde_Imap_Client;
 use OC\Files\Node\File;
 use OCA\Mail\Account;
+use OCA\Mail\Address;
+use OCA\Mail\AddressList;
 use OCA\Mail\Contracts\IAttachmentService;
 use OCA\Mail\Contracts\IMailTransmission;
 use OCA\Mail\Db\Alias;
@@ -57,8 +59,7 @@ class MailTransmission implements IMailTransmission {
 	 * @param IAttachmentService $attachmentService
 	 * @param Logger $logger
 	 */
-	public function __construct(AddressCollector $addressCollector, $userFolder, IAttachmentService $attachmentService,
-		Logger $logger) {
+	public function __construct(AddressCollector $addressCollector, $userFolder, IAttachmentService $attachmentService, Logger $logger) {
 		$this->addressCollector = $addressCollector;
 		$this->userFolder = $userFolder;
 		$this->attachmentService = $attachmentService;
@@ -75,8 +76,7 @@ class MailTransmission implements IMailTransmission {
 	 * @param int|null $draftUID
 	 * @return int message UID
 	 */
-	public function sendMessage($userId, NewMessageData $messageData, RepliedMessageData $replyData, Alias $alias = null,
-		$draftUID = null) {
+	public function sendMessage($userId, NewMessageData $messageData, RepliedMessageData $replyData, Alias $alias = null, $draftUID = null) {
 		$account = $messageData->getAccount();
 
 		if ($replyData->isReply()) {
@@ -85,8 +85,12 @@ class MailTransmission implements IMailTransmission {
 			$message = $this->buildNewMessage($account, $messageData);
 		}
 
+		$fromEmail = $alias ? $alias->alias : $account->getEMailAddress();
+		$from = new AddressList([
+			new Address($account->getName(), $fromEmail),
+		]);
 		$account->setAlias($alias);
-		$message->setFrom($alias ? $alias->alias : $account->getEMailAddress());
+		$message->setFrom($from);
 		$message->setCC($messageData->getCc());
 		$message->setBcc($messageData->getBcc());
 		$message->setContent($messageData->getBody());
@@ -113,7 +117,10 @@ class MailTransmission implements IMailTransmission {
 		$imapMessage = $account->newMessage();
 		$imapMessage->setTo($message->getTo());
 		$imapMessage->setSubject($message->getSubject() ?: '');
-		$imapMessage->setFrom($account->getEMailAddress());
+		$from = new AddressList([
+			new Address($account->getName(), $account->getEMailAddress()),
+		]);
+		$imapMessage->setFrom($from);
 		$imapMessage->setCC($message->getCc());
 		$imapMessage->setBcc($message->getBcc());
 		$imapMessage->setContent($message->getBody());
@@ -250,7 +257,9 @@ class MailTransmission implements IMailTransmission {
 	 */
 	private function collectMailAddresses($message) {
 		try {
-			$addresses = array_merge($message->getToList(), $message->getCCList(), $message->getBCCList());
+			$addresses = $message->getTo()
+				->merge($message->getCC())
+				->merge($message->getBCC());
 			$this->addressCollector->addAddresses($addresses);
 		} catch (Exception $e) {
 			$this->logger->error("Error while collecting mail addresses: " . $e->getMessage());
