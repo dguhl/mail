@@ -22,6 +22,7 @@
 namespace OCA\Mail\Tests\Service;
 
 use Horde_Imap_Client;
+use Horde_Mail_Transport;
 use OC\Files\Node\File;
 use OCA\Mail\Account;
 use OCA\Mail\Address;
@@ -36,6 +37,7 @@ use OCA\Mail\Model\ReplyMessage;
 use OCA\Mail\Service\AutoCompletion\AddressCollector;
 use OCA\Mail\Service\Logger;
 use OCA\Mail\Service\MailTransmission;
+use OCA\Mail\SMTP\SmtpClientFactory;
 use OCA\Mail\Tests\TestCase;
 use OCP\Files\Folder;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -51,6 +53,9 @@ class MailTransmissionTest extends TestCase {
 	/** @var IAttachmentService|PHPUnit_Framework_MockObject_MockObject */
 	private $attachmentService;
 
+	/** @var SmtpClientFactory|PHPUnit_Framework_MockObject_MockObject */
+	private $clientFactory;
+
 	/** @var Logger|PHPUnit_Framework_MockObject_MockObject */
 	private $logger;
 
@@ -63,9 +68,10 @@ class MailTransmissionTest extends TestCase {
 		$this->addressCollector = $this->createMock(AddressCollector::class);
 		$this->userFolder = $this->createMock(Folder::class);
 		$this->attachmentService = $this->createMock(IAttachmentService::class);
+		$this->clientFactory = $this->createMock(SmtpClientFactory::class);
 		$this->logger = $this->createMock(Logger::class);
 
-		$this->transmission = new MailTransmission($this->addressCollector, $this->userFolder, $this->attachmentService, $this->logger);
+		$this->transmission = new MailTransmission($this->addressCollector, $this->userFolder, $this->attachmentService, $this->clientFactory, $this->logger);
 	}
 
 	public function testSendNewMessage() {
@@ -76,9 +82,14 @@ class MailTransmissionTest extends TestCase {
 		$account->expects($this->once())
 			->method('newMessage')
 			->willReturn($message);
+		$transport = $this->createMock(Horde_Mail_Transport::class);
+		$this->clientFactory->expects($this->once())
+			->method('create')
+			->with($account)
+			->willReturn($transport);
 		$account->expects($this->once())
 			->method('sendMessage')
-			->with($message, null);
+			->with($message, $transport, null);
 		$message->expects($this->once())
 			->method('getTo')
 			->willReturn(new AddressList());
@@ -137,9 +148,14 @@ class MailTransmissionTest extends TestCase {
 		$account->expects($this->once())
 			->method('newMessage')
 			->willReturn($message);
+		$transport = $this->createMock(Horde_Mail_Transport::class);
+		$this->clientFactory->expects($this->once())
+			->method('create')
+			->with($account)
+			->willReturn($transport);
 		$account->expects($this->once())
 			->method('sendMessage')
-			->with($message, 123);
+			->with($message, $transport, 123);
 		$message->expects($this->once())
 			->method('getTo')
 			->willReturn(new AddressList());
@@ -163,9 +179,14 @@ class MailTransmissionTest extends TestCase {
 		$account->expects($this->once())
 			->method('newMessage')
 			->willReturn($message);
+		$transport = $this->createMock(Horde_Mail_Transport::class);
+		$this->clientFactory->expects($this->once())
+			->method('create')
+			->with($account)
+			->willReturn($transport);
 		$account->expects($this->once())
 			->method('sendMessage')
-			->with($message, null);
+			->with($message, $transport, null);
 		$account->expects($this->once())
 			->method('getName')
 			->willReturn('User');
@@ -205,9 +226,14 @@ class MailTransmissionTest extends TestCase {
 		$account->expects($this->once())
 			->method('newMessage')
 			->willReturn($message);
+		$transport = $this->createMock(Horde_Mail_Transport::class);
+		$this->clientFactory->expects($this->once())
+			->method('create')
+			->with($account)
+			->willReturn($transport);
 		$account->expects($this->once())
 			->method('sendMessage')
-			->with($message, null);
+			->with($message, $transport, null);
 		$this->userFolder->expects($this->exactly(2))
 			->method('nodeExists')
 			->willReturnMap([
@@ -258,9 +284,14 @@ class MailTransmissionTest extends TestCase {
 		$message->expects($this->once())
 			->method('setRepliedMessage')
 			->with($repliedMessage);
+		$transport = $this->createMock(Horde_Mail_Transport::class);
+		$this->clientFactory->expects($this->once())
+			->method('create')
+			->with($account)
+			->willReturn($transport);
 		$account->expects($this->once())
 			->method('sendMessage')
-			->with($message, null);
+			->with($message, $transport, null);
 		$mailbox->expects($this->once())
 			->method('setMessageFlag')
 			->with($repliedMessageId, Horde_Imap_Client::FLAG_ANSWERED, true);

@@ -52,8 +52,8 @@
     "Junk" : "Ανεπιθύμητα",
     "All" : "Όλα",
     "Favorites" : "Αγαπημένα",
-    "Creating account failed: " : "Αποτυχία δημιουργίας λογαριασμού:",
     "Auto detect failed. Please use manual mode." : "Η αυτόματη ανίχνευση απέτυχε. Παρακαλούμε χρησιμοποιήστε τη χειροκίνητη λειτουργία.",
+    "Creating account failed: " : "Αποτυχία δημιουργίας λογαριασμού:",
     "Delete permanently" : "Μόνιμη διαγραφή",
     "& others" : "& άλλοι",
     "Error loading message" : "Σφάλμα φόρτωσης μηνύματος",
@@ -110,8 +110,6 @@
     "The images have been blocked to protect your privacy." : "Οι εικόνες έχουν αποκλειστεί για να προστατευθεί η ιδιωτικότητά σας.",
     "Show images from this sender" : "Εμφάνιση εικόνων από αυτόν τον αποστολέα",
     "Forward" : "Προώθηση",
-    "Add attachment" : "Προσθήκη συνημμένου",
-    "Add from Files" : "Προσθήκη από τα Αρχεία",
     "Import into calendar" : "Εισαγωγή στο ημερολόγιο",
     "Download attachment" : "Λήψη συνημμένου",
     "Save to Files" : "Αποθήκευση στα Αρχεία"

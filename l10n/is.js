@@ -58,8 +58,8 @@ OC.L10N.register(
     "Junk" : "Ruslpóstur",
     "All" : "Allt",
     "Favorites" : "Eftirlæti",
-    "Creating account failed: " : "Mistókst að búa til notandaaðgang: ",
     "Auto detect failed. Please use manual mode." : "Mistókst að finna sjálkrafa. Notaðu handvirku leiðina.",
+    "Creating account failed: " : "Mistókst að búa til notandaaðgang: ",
     "Delete permanently" : "Eyða varanlega",
     "& others" : "og aðrir",
     "Error loading message" : "Villa við hleðslu á skilaboðum",
@@ -117,8 +117,6 @@ OC.L10N.register(
     "The images have been blocked to protect your privacy." : "Lokað hefur verið á myndir til að vernda einkalíf þitt.",
     "Show images from this sender" : "Birta myndir frá þessum sendanda",
     "Forward" : "Áframsenda",
-    "Add attachment" : "Bæta við viðhengi",
-    "Add from Files" : "Bæta við úr skrám",
     "Import into calendar" : "Flytja inn dagatal",
     "Download attachment" : "Sækja viðhengi",
     "Save to Files" : "Vista í skrár"

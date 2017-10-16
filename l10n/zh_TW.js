@@ -50,8 +50,8 @@ OC.L10N.register(
     "Junk" : "垃圾郵件",
     "All" : "所有",
     "Favorites" : "最愛",
-    "Creating account failed: " : "建立帳號失敗：",
     "Auto detect failed. Please use manual mode." : "自動偵測失敗，請改用手動輸入",
+    "Creating account failed: " : "建立帳號失敗：",
     "Delete permanently" : "永久刪除",
     "& others" : "和其他人",
     "Error loading message" : "載入訊息錯誤",
@@ -108,8 +108,6 @@ OC.L10N.register(
     "The images have been blocked to protect your privacy." : "為維護你的隱私，圖片將不會被載入。",
     "Show images from this sender" : "顯示來自此寄件者的圖片",
     "Forward" : "轉寄",
-    "Add attachment" : "新增附檔",
-    "Add from Files" : "新增自檔案",
     "Import into calendar" : "匯入日曆",
     "Download attachment" : "下載附檔",
     "Save to Files" : "存至檔案"

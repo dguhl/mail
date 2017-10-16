@@ -37,6 +37,7 @@ use OCA\Mail\Model\IMessage;
 use OCA\Mail\Model\NewMessageData;
 use OCA\Mail\Model\RepliedMessageData;
 use OCA\Mail\Service\AutoCompletion\AddressCollector;
+use OCA\Mail\SMTP\SmtpClientFactory;
 use OCP\Files\Folder;
 
 class MailTransmission implements IMailTransmission {
@@ -50,6 +51,9 @@ class MailTransmission implements IMailTransmission {
 	/** @var IAttachmentService */
 	private $attachmentService;
 
+	/** @var SmtpClientFactory */
+	private $clientFactory;
+
 	/** @var Logger */
 	private $logger;
 
@@ -57,12 +61,14 @@ class MailTransmission implements IMailTransmission {
 	 * @param AddressCollector $addressCollector
 	 * @param Folder $userFolder
 	 * @param IAttachmentService $attachmentService
+	 * @param SmtpClientFactory $clientFactory
 	 * @param Logger $logger
 	 */
-	public function __construct(AddressCollector $addressCollector, $userFolder, IAttachmentService $attachmentService, Logger $logger) {
+	public function __construct(AddressCollector $addressCollector, $userFolder, IAttachmentService $attachmentService, SmtpClientFactory $clientFactory, Logger $logger) {
 		$this->addressCollector = $addressCollector;
 		$this->userFolder = $userFolder;
 		$this->attachmentService = $attachmentService;
+		$this->clientFactory = $clientFactory;
 		$this->logger = $logger;
 	}
 
@@ -96,7 +102,8 @@ class MailTransmission implements IMailTransmission {
 		$message->setContent($messageData->getBody());
 		$this->handleAttachments($userId, $messageData, $message);
 
-		$uid = $account->sendMessage($message, $draftUID);
+		$transport = $this->clientFactory->create($account);
+		$uid = $account->sendMessage($message, $transport, $draftUID);
 
 		if ($replyData->isReply()) {
 			$this->flagRepliedMessage($account, $replyData);

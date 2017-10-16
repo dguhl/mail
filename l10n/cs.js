@@ -59,8 +59,8 @@ OC.L10N.register(
     "Junk" : "Spam",
     "All" : "Vše",
     "Favorites" : "Oblíbené",
-    "Creating account failed: " : "Vytvoření účtu selhalo:",
     "Auto detect failed. Please use manual mode." : "Autodetekce selhala. Použijte prosím ruční nastavení.",
+    "Creating account failed: " : "Vytvoření účtu selhalo:",
     "Delete permanently" : "Trvale odstranit",
     "& others" : "a další",
     "Error loading message" : "Chyba načtení zprávy",
@@ -118,8 +118,6 @@ OC.L10N.register(
     "The images have been blocked to protect your privacy." : "Obrázky byly zablokovány pro ochranu vašeho soukromí.",
     "Show images from this sender" : "Zobrazit obrázky od tohoto odesílatele",
     "Forward" : "Přeposlat",
-    "Add attachment" : "Přidat přílohu",
-    "Add from Files" : "Přidat ze Souborů",
     "Import into calendar" : "Importovat do kalendáře",
     "Download attachment" : "Stáhnout přílohu",
     "Save to Files" : "Uložit do Souborů"
